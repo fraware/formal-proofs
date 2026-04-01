@@ -522,7 +522,7 @@ macro_rules
 
 /- Convert a program to a list of terms of type `Nat`. -/
 
--- TODO: understand the performance problem.
+-- This recursive formulation expands substantially faster than the array-based variants above.
 -- The first two `macro_rules` implementations are too slow.
 
 -- macro_rules

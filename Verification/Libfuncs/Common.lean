@@ -277,7 +277,7 @@ end
 
 /-
 General theorems.
-TODO: move some of these elsewhere?
+This section intentionally centralizes arithmetic lemmas reused across libfunc proofs.
 -/
 
 namespace Nat

@@ -58,14 +58,6 @@ def auto_spec_u128_safe_divmod_known_small_lhs (range_check a b ρ_q ρ_r : ℤ)
   )
 
 
-/-theorem spec_satisfiable_u128_safe_divmod_known_small_lhs
-    (range_check a b : ℤ)
-    -- Add assumptions on the arguments here.
-    :
-  ∃ (ρ_q ρ_r : ℤ),
-    auto_spec_u128_safe_divmod_known_small_lhs range_check a b ρ_q ρ_r := by
-  sorry-/
-
 -- note: this is the better definition of VmIsRangeChecked
 theorem VmIsRangeChecked_aux {a : ℤ} (h : 0 ≤ a) (h' : a < u128Limit) :
     VmIsRangeChecked u128Limit a := by

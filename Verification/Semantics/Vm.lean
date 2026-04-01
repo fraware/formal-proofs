@@ -16,7 +16,7 @@ import Verification.Semantics.Cpu
 
 noncomputable section
 
--- TODO(Jeremy): we can add others
+-- Current memory regions modeled by the VM semantics.
 inductive Mrel
   | prog : Int → Mrel
   | exec : Int → Mrel

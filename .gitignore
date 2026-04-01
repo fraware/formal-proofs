@@ -1,3 +1,17 @@
 *.olean
 _target/
-leanpkg.path
+.lake/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/

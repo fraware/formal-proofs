@@ -1,72 +1,75 @@
 # Cairo Verification
 
-This repository contains formal verification of various aspects of the Cairo programming
-language using the Lean programming language and proof assistant.
+[![CI](https://github.com/fraware/formal-proofs/actions/workflows/lean4-ci.yml/badge.svg)](https://github.com/fraware/formal-proofs/actions/workflows/lean4-ci.yml)
+[![Lean4](https://img.shields.io/badge/Lean-4.29.0-blue)](https://lean-lang.org/)
+[![License: Apache--2.0](https://img.shields.io/badge/License-Apache%202.0-green.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## Contents
+`verification` is a Lean 4 package for formal reasoning about Cairo execution semantics and Cairo library functions.
 
-The folder [Verification/Semantics](Verification/Semantics) contains a specification of the Cairo
-virtual machine semantics and a proof of the correctness of the Cairo STARK encoding.
+## What This Package Provides
 
-- The file [Cpu.lean](Verification/Semantics/Cpu.lean) contains a specification of the execution
-semantics of the Cairo CPU, used to prove soundness of Cairo programs and the correctness of the
-STARK encoding.
+- A Lean formalization of Cairo VM and CPU semantics.
+- Soundness and completeness proof infrastructure for Cairo assembly-level reasoning.
+- Verified specifications for selected Cairo libfunc families (`u16`, `u32`, `u64`, `u128`,
+  `u256`, `u512`, and bounded integer routines).
+- AIR encoding correctness components used in STARK-oriented verification workflows.
 
-- The file [Vm.lean](Verification/Semantics/Vm.lean) contains a slightly abstracted semantics of the
-Cairo virtual machine, used to prove completeness of Cairo programs.
+## Install
 
-- The [AirEncoding](Verification/Semantics/AirEncoding) folder contains a proof of the correctness
-of the algebraic encoding of execution traces of Cairo programs that are used to generate STARK
-certificates.
+Add this package to your `lakefile.lean`:
 
-- The [Soundness](Verification/Semantics/Soundness) folder contains infrastructure used to prove the
-soundness of Cairo programs and library functions.
+```lean
+require verification from git
+  "https://github.com/fraware/formal-proofs.git"
+```
 
-- The [Completeness](Verification/Semantics/Completeness) folder contains infrastructure used to
-prove the soundness of Cairo programs and library functions.
+Then build your project as usual with `lake build`.
 
-The folder [Verification/Libfuncs](Verification/Libfuncs) contains verifications of the
-soundness and completeness of a number of Cairo library functions, also known as *libfuncs*.
+## Minimal Usage Example
 
-The [lean3](lean3) folder contains older Lean 3 verifications of parts of the CairoZero library,
-including:
+```lean
+import Verification.Semantics.Assembly
 
-- basic mathematical calculations
-- operations on the secp256k1 and  secp256r1 elliptic curves
-- digital signature validation
-- procedures for simulating dictionary access in a read-only enviroment.
+#check Casm.Instr
+```
 
-Details can be found in the file [README.md](lean3/README.md) in that folder.
+## Build From This Repository
 
+Prerequisites:
+- Lean 4 (toolchain pinned by `lean-toolchain`)
+- Lake
+
+From the repository root:
+
+```bash
+lake exe cache get
+lake build
+```
+
+Notes:
+- `lake exe cache get` downloads precompiled mathlib artifacts to speed up builds.
+- If your environment has strict thread limits, you can run:
+  `LEAN_NUM_THREADS=1 lake build +Verification`
+
+## Repository Layout
+
+- `Verification/Semantics`: Cairo semantics and proof infrastructure.
+  - `Cpu.lean`: CPU execution semantics.
+  - `Vm.lean`: VM-style semantics used for completeness-oriented reasoning.
+  - `Soundness/`: one-step reasoning and Hoare-style tooling.
+  - `Completeness/`: VM completeness machinery.
+  - `AirEncoding/`: algebraic trace encoding and correctness lemmas.
+- `Verification/Libfuncs`: soundness/completeness specs and proofs for selected Cairo libfuncs.
+- `Verification.lean`: top-level module aggregator.
 
 ## Publications
 
-- Our verification of the algebraic encoding of Cairo execution traces is described in the paper
-  [A verified algebraic representation of Cairo program execution](https://dl.acm.org/doi/10.1145/3497775.3503675).
+- [A verified algebraic representation of Cairo program execution](https://dl.acm.org/doi/10.1145/3497775.3503675)
+- [A proof-producing compiler for blockchain applications](https://doi.org/10.4230/LIPIcs.ITP.2023.7)
 
-- Our verification tools and our verification of CairoZero code used for elliptic curve operations
-  and to validate cryptographic signatures are described in the paper
-  [A proof-producing compiler for blockchain applications](https://doi.org/10.4230/LIPIcs.ITP.2023.7).
+## Maintenance Policy
 
-
-## Build
-
-The main folder is a Lean 4 project. You should have Lean 4 and the VS Code
-extension [installed](https://docs.lean-lang.org/lean4/doc/quickstart.html).
-
-Once you have Lean 4 installed, you can fetch this repository by choosing `Open Project`
-on the Lean VS Code menu or in the usual way with `git clone`. In the latter case, you
-should run
-
-```
-lake exe cache get
-```
-in this folder to get the precompiled Mathlib files.
-
-Use
-```
-lake build
-```
-to compile all the files listed above `Verification.lean`. One completeness proof in the
-`Libfuncs` folder is commented out because it is slow to build and requires a lot of memory;
-the remaining files take only a few minutes to compile.
+- This repository is Lean 4 only.
+- Release checks run from the repository root.
+- Primary quality-gated artifacts are:
+  `Verification/`, `Verification.lean`, `lakefile.lean`, `lake-manifest.json`, and `lean-toolchain`.

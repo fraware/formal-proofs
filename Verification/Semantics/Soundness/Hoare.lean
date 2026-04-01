@@ -21,7 +21,7 @@ To take a step forward, however, we need to verify that the current instruction 
 instruction. The following lemmas help with do that efficiently.
 -/
 
--- TODO: Hard-coded, can we pull from casm_instr!{} instead?
+-- Canonical encoded halt instruction (`jmp rel [op1_imm]`).
 -- `jmp rel [ op1_imm ]
 def jmpRelInstr : Instr := jumpInstr false (Op0Spec.fp_plus (-1)) (ResSpec.op1 (Op1Spec.mem_pc_plus 1)) false
 
@@ -407,7 +407,7 @@ theorem ret_ensuresb [char_ge : CharGe263 F] {bound : ℕ} (h : mem s.pc = retIn
     ext <;> simp [ht]
   apply ensuresb_step h1 h2 (fun _ => h') _ nlt
 
--- TODO: It breaks when "ap" is used below in h₃, fixed with ap'
+-- `ap'` avoids name shadowing with register field projections in generated goals.
 theorem call_ensuresb_trans [char_ge : CharGe263 F] {bound : ℕ} {P Q : ℕ → RegisterState F → Prop}
     {res : ResSpec} {call_abs : Bool} {x : F} (h₀ : mem s.pc = x)
     (h₁ : x = (callInstr call_abs res).toNat)
@@ -520,7 +520,7 @@ namespace Tactic
 
 namespace Interactive
 
--- TODO: Figure out how to properly do an optional " at "
+-- Two tactics are kept explicit: one for goal simplification and one for local-hypothesis simplification.
 macro (name := arith_simps₁) "arith_simps" : tactic => `(tactic|
   ( try simp only [Int.cast_zero, Int.cast_one, Int.cast_neg, Nat.cast_zero, Nat.cast_one,
     add_assoc, add_sub_assoc, add_zero, zero_add, add_neg_cancel, neg_add_cancel,

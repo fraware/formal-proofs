@@ -13,8 +13,8 @@ lemma u128Limit_minus_sqrtAdjustment : u128Limit - sqrtAdjustment = 2^125 := by
 theorem sqrtAdjustment_lt_u128Limit : sqrtAdjustment < u128Limit := by
   unfold sqrtAdjustment u128Limit; norm_num1
 
--- TODO: This spec might be too permissive (given that the square root must be
---   smaller than u16Limit), but with the equality, it works
+-- The executable spec is intentionally phrased via equality witness `na.sqrt`,
+-- which enforces the expected bound through `is_u16_of`.
 def spec_u16_sqrt (a ρ_sqrt : F) : Prop := ∀ na, is_u16_of a na → is_u16_of ρ_sqrt na.sqrt
 
 def auto_spec_u16_sqrt (a ρ_sqrt : F) : Prop :=

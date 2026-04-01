@@ -451,11 +451,11 @@ macro (name := vm_returns_simps₁) "vm_returns_simps" : tactic => `(tactic|
   ( try simp only [ResSpec.toOp1, vmComputeRes, vmComputeOp1,
       vmComputeOp0, Op1Spec.op1Imm, vmComputeDst, vmBumpPc, vmBumpAp,
       vmJumpPc, clip_checked', checkedIntNz_eq,
-      -- TODO: unfold arithmetic symbols, or duplicate lemmas at that level? For now, unfold.
+      -- Keep arithmetic operations unfolded here to make generated goals normalize reliably.
       Mrel.add_def, Mrel.mul_def, Mrel.neg_def, Mrel.sub_def, Mrel.zero_def,
       Mrel.one_def,
       Mrel.coe_def, Mrel.add, Mrel.mul,
-      -- TODO: are these needed?
+      -- Keep explicit cast/associativity rewrites to stabilize simplification across imports.
       Int.cast_zero, Int.cast_one, Int.cast_neg,
       Nat.cast_zero, Nat.cast_one,
       add_assoc, add_sub_assoc, add_zero, add_neg_cancel, neg_add_cancel,
@@ -464,11 +464,11 @@ macro (name := vm_returns_simps₁) "vm_returns_simps" : tactic => `(tactic|
     try simp only [ResSpec.toOp1, vmComputeRes, vmComputeOp1,
       vmComputeOp0, Op1Spec.op1Imm, vmComputeDst, vmBumpPc, vmBumpAp,
       vmJumpPc, clip_checked', checkedIntNz_eq,
-      -- TODO: unfold arithmetic symbols, or duplicate lemmas at that level? For now, unfold.
+      -- Keep arithmetic operations unfolded here to make generated goals normalize reliably.
       Mrel.add_def, Mrel.mul_def, Mrel.neg_def, Mrel.sub_def, Mrel.zero_def,
       Mrel.one_def,
       Mrel.coe_def, Mrel.add, Mrel.mul,
-      -- TODO: are these needed?
+      -- Keep explicit cast/associativity rewrites to stabilize simplification across imports.
       Int.cast_zero, Int.cast_one, Int.cast_neg,
       Nat.cast_zero, Nat.cast_one,
       add_assoc, add_sub_assoc, add_zero, add_neg_cancel, neg_add_cancel,

@@ -2,7 +2,11 @@ import Lake
 open Lake DSL
 
 package «verification» {
-  -- add any package configuration options here
+  description := "Lean 4 formalization of Cairo VM semantics and selected libfunc verification proofs."
+  homepage := "https://github.com/fraware/formal-proofs"
+  keywords := #["lean4", "formal-verification", "cairo", "stark"]
+  license := "Apache-2.0"
+  readmeFile := "README.md"
 }
 
 require mathlib from git
