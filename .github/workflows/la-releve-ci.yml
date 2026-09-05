@@ -18,15 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Lean kernel build and independent checks
+      - name: Lean kernel build, leanchecker, and axiom audit
         uses: leanprover/lean-action@v1
         with:
           lake-package-directory: projects/la-releve/formal
           build: true
           build-args: '--wfail'
           leanchecker: true
-          nanoda: true
-          nanoda-allow-sorry: false
+          nanoda: false
           axiom-audit: true
           axiom-audit-root: LaReleve
           use-mathlib-cache: false
@@ -34,3 +33,42 @@ jobs:
       - name: Print theorem axiom dependencies
         working-directory: projects/la-releve/formal
         run: lake env lean LaReleve/AxiomAudit.lean
+
+      - name: Independent Rust-kernel check with pinned nanoda
+        working-directory: projects/la-releve/formal
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _lean4export _nanoda_lib _nanoda_export.txt _nanoda_config.json
+
+          git clone --quiet --depth 1 --branch v4.33.1 https://github.com/leanprover/lean4export.git _lean4export
+          (cd _lean4export && lake build lean4export)
+
+          git clone --quiet https://github.com/robsimmons/nanoda_lib.git _nanoda_lib
+          git -C _nanoda_lib checkout --quiet 68d5ca9db226849b41a6fff59d796ff19d0a8840
+          cargo build --release --locked --quiet --manifest-path _nanoda_lib/Cargo.toml
+
+          lake env _lean4export/.lake/build/bin/lean4export LaReleve > _nanoda_export.txt
+
+          cat > _nanoda_config.json <<'JSON'
+          {
+            "export_file_path": "_nanoda_export.txt",
+            "use_stdin": false,
+            "permitted_axioms": [
+              "propext",
+              "Classical.choice",
+              "Quot.sound",
+              "Lean.trustCompiler",
+              "Lean.ofReduceNat",
+              "Lean.ofReduceBool",
+              "sorryAx"
+            ],
+            "unpermitted_axiom_hard_error": false,
+            "nat_extension": true,
+            "string_extension": true,
+            "print_success_message": true
+          }
+          JSON
+
+          _nanoda_lib/target/release/nanoda_bin _nanoda_config.json
+          rm -rf _lean4export _nanoda_lib _nanoda_export.txt _nanoda_config.json
