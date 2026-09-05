@@ -1,0 +1,6 @@
+name = "LaReleve"
+version = "0.1.0"
+defaultTargets = ["LaReleve"]
+
+[[lean_lib]]
+name = "LaReleve"
