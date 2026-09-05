@@ -1,0 +1,36 @@
+name: La Releve Lean verification
+
+on:
+  push:
+    branches:
+      - la-releve-v1.3-ci
+    paths:
+      - 'projects/la-releve/formal/**'
+      - '.github/workflows/la-releve-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lean kernel build and independent checks
+        uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: projects/la-releve/formal
+          build: true
+          build-args: '--wfail'
+          leanchecker: true
+          nanoda: true
+          nanoda-allow-sorry: false
+          axiom-audit: true
+          axiom-audit-root: LaReleve
+          use-mathlib-cache: false
+
+      - name: Print theorem axiom dependencies
+        working-directory: projects/la-releve/formal
+        run: lake env lean LaReleve/AxiomAudit.lean
