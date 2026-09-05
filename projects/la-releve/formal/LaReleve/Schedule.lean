@@ -49,15 +49,16 @@ def repeatCount (s : Schedule) : Nat :=
     (fun n i => n + (if edgeRepeat s i = true then 1 else 0))
     0
 
-/-- Hard weekly recurrence: the two displayed Mondays have the same caregiver. -/
-def recurrence (s : Schedule) : Prop := s.mon1 = s.mon0
+/-- Hard weekly recurrence: the two displayed Mondays have the same caregiver.
+`abbrev` keeps the proposition transparent to decidability synthesis. -/
+abbrev recurrence (s : Schedule) : Prop := s.mon1 = s.mon0
 
 /-- Perfect alternation under the hard recurrence. -/
-def perfectAlternation (s : Schedule) : Prop :=
+abbrev perfectAlternation (s : Schedule) : Prop :=
   recurrence s ∧ repeatCount s = 0
 
 /-- A minimum-repair realization: hard recurrence plus exactly one repeated edge. -/
-def minimumRepair (s : Schedule) : Prop :=
+abbrev minimumRepair (s : Schedule) : Prop :=
   recurrence s ∧ repeatCount s = 1
 
 /-- All labelled minimum-repair realizations. -/
@@ -101,7 +102,7 @@ def visitsB (s : Schedule) : Nat :=
   asB s.fri + asB s.sat + asB s.sun
 
 /-- The burden is split 3/4 in either direction. -/
-def burdenThreeFour (s : Schedule) : Prop :=
+abbrev burdenThreeFour (s : Schedule) : Prop :=
   (visitsA s = 4 ∧ visitsB s = 3) ∨
   (visitsA s = 3 ∧ visitsB s = 4)
 
