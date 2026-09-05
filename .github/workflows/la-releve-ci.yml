@@ -61,10 +61,9 @@ jobs:
               "Quot.sound",
               "Lean.trustCompiler",
               "Lean.ofReduceNat",
-              "Lean.ofReduceBool",
-              "sorryAx"
+              "Lean.ofReduceBool"
             ],
-            "unpermitted_axiom_hard_error": false,
+            "unpermitted_axiom_hard_error": true,
             "nat_extension": true,
             "string_extension": true,
             "print_success_message": true
